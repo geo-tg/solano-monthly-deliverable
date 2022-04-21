@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     try:
         arcpy.AddMessage(datetime.now().strftime('%m%d%Y %H:%M:%S'))
-        arcpy.AddMessage('Beginning process...woohoo it worked!')
+        arcpy.AddMessage('Beginning process...woohoo it actually worked!')
 
         extractEncroachmentParcels(in_parcels, out_folder, q)
 
