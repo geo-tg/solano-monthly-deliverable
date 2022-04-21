@@ -23,11 +23,14 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
     q = '{} = {}'.format(query_field, domain_num)
 
     #select and export APs
-    #APlyr = arcpy.MakeFeatureLayer_management(APs, 'APsToVerify_{}_{}'.format(city, today))
     APselection = arcpy.SelectLayerByAttribute_management(APs, 'NEW_SELECTION', q)
+
     arcpy.FeatureClassToFeatureClass_conversion(APselection, r'{}\{}.gdb'.format(folderToZip, name), 'APsToVerify_{}_{}'.format(city, today))
+
     kmzPath = r'{0}\{1}.kmz'.format(folderToZip, 'APsToVerify_{}_{}'.format(city, today))
     arcpy.LayerToKML_conversion(APselection, kmzPath)
+
+    
 
 
     #select and export RCLs, if applicable
