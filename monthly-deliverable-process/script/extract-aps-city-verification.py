@@ -25,13 +25,13 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
     q = '{} = {}'.format(query_field, domain_num)
     APselection = arcpy.SelectLayerByAttribute_management(APs, 'NEW_SELECTION', q)
     #make fc
-    fc = arcpy.FeatureClassToFeatureClass_conversion(APselection, r'{}\{}.gdb'.format(folderToZip, name), 'APsToVerify_{}_{}'.format(city, today))
+    apfc = arcpy.FeatureClassToFeatureClass_conversion(APselection, r'{}\{}.gdb'.format(folderToZip, name), 'APsToVerify_{}_{}'.format(city, today))
     #make kmz
     kmzPath = r'{0}\{1}.kmz'.format(folderToZip, 'APsToVerify_{}_{}'.format(city, today))
     arcpy.LayerToKML_conversion(APselection, kmzPath)
     arcpy.management.SelectLayerByAttribute(APs, 'CLEAR_SELECTION')
     #make excel list
-    excel_result = arcpy.TableToExcel_conversion(fc, folderToZip + r'\APsToVerify_{}_{}.xls'.format(city, today))
+    excel_result = arcpy.TableToExcel_conversion(apfc, folderToZip + r'\APsToVerify_{}_{}.xls'.format(city, today))
     excel_path = excel_result[0]
     df = pd.read_excel(excel_path)
     #fieldstodrop = ['DiscrpAgID','DateUpdate','Effective','Expire','Country','State','County','AddDataURI','Inc_Muni','Uninc_Comm','Nbrhd_Comm','LSt_PreDir','LSt_Name','LSt_Type','LSt_PosDir','ESN','MSAGComm','Post_Comm','Post_Code','Post_Code4','Building','Floor','Room','Seat','Addtl_Loc','LandmkName','Mile_Post','Place_Type','Placement','Long','Lat','Elev','GC_Exception','created_user','created_date','last_edited_user','last_edited_date','GlobalID','ADDRESS_ID','SEGMENT_ID','NAME_ID','SIDE','ANOMALY','UNIT_NUM','UNIT_TYPE','NOT MIGRATED']
@@ -46,13 +46,13 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
     if RCLs:
         RCLlyr = arcpy.MakeFeatureLayer_management(RCLs, 'RCLsToVerify_{}_{}'.format(city, today))
         RCLselection = arcpy.SelectLayerByAttribute_management(RCLlyr, 'NEW_SELECTION', q)
-        arcpy.FeatureClassToFeatureClass_conversion(RCLselection, r'{}\{}'.format(folderToZip, '{}.gdb'.format(name)), 'RCLsToVerify_{}_{}'.format(city, today))
+        rclfc =arcpy.FeatureClassToFeatureClass_conversion(RCLselection, r'{}\{}'.format(folderToZip, '{}.gdb'.format(name)), 'RCLsToVerify_{}_{}'.format(city, today))
         kmzPath = r'{0}\{1}.kmz'.format(folderToZip, 'RCLsToVerify_{}_{}'.format(city, today))
         arcpy.LayerToKML_conversion(RCLselection, kmzPath)
-        excel_result = arcpy.TableToExcel_conversion(fc, folderToZip + r'\RCLsToVerify_{}_{}.xls'.format(city, today))
+        excel_result = arcpy.TableToExcel_conversion(rclfc, folderToZip + r'\RCLsToVerify_{}_{}.xls'.format(city, today))
         excel_path = excel_result[0]
         df = pd.read_excel(excel_path)
-        RCLfieldstodrop = ['OBJECTID','srcUnqID','gcLgFlName','gcFullName']
+        RCLfieldstodrop = ['OBJECTID', 'srcUnqID', 'gcLgFlName', 'gcFullName', 'rdOwner', 'esnL', 'esnR', 'postCommL', 'postCommR', 'zipCodeL', 'zipCodeR', 'srcOfData', 'srcLastEd', 'effective', 'gcLabel', 'lgcyPreDir', 'lgcyName', 'lgcyType', 'lgcyPstDir', 'parityL', 'parityR', 'speedLimit', 'oneWay', 'roadClass', 'minutes', 'miles', 'fcc', 'fZlevel', 'tZlevel', 'countryL', 'countryR', 'stateL', 'stateR', 'countyL', 'countyR', 'incMuniL', 'incMuniR', 'unincCommL', 'unincCommR', 'nbrhdCommL', 'nbrhdCommR', 'msagCommL', 'msagCommR', 'voipEsnL', 'voipEsnR', 'rdNumber', 'alias', 'exception', 'gcCaseNum', 'gcNotes', 'AT_NAME', 'SP_NAME', 'CR_NAME', 'created_user', 'created_date', 'last_edited_user', 'last_edited_date', 'GlobalID']
         df.drop(RCLfieldstodrop, axis=1, inplace=True)
         writer = pd.ExcelWriter(excel_path)
         df.to_excel(writer, 'Sheet1')
