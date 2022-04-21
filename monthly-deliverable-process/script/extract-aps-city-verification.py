@@ -31,15 +31,15 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
     arcpy.LayerToKML_conversion(APselection, kmzPath)
     arcpy.management.SelectLayerByAttribute(APs, 'CLEAR_SELECTION')
     #make excel list
-    excel_result = arcpy.TableToExcel_conversion(fc, out_folder + r'\APsToVerify_{}_{}.xls'.format(city, today))
+    excel_result = arcpy.TableToExcel_conversion(fc, folderToZip + r'\APsToVerify_{}_{}.xls'.format(city, today))
     excel_path = excel_result[0]
     df = pd.read_excel(excel_path)
     #fieldstodrop = ['DiscrpAgID','DateUpdate','Effective','Expire','Country','State','County','AddDataURI','Inc_Muni','Uninc_Comm','Nbrhd_Comm','LSt_PreDir','LSt_Name','LSt_Type','LSt_PosDir','ESN','MSAGComm','Post_Comm','Post_Code','Post_Code4','Building','Floor','Room','Seat','Addtl_Loc','LandmkName','Mile_Post','Place_Type','Placement','Long','Lat','Elev','GC_Exception','created_user','created_date','last_edited_user','last_edited_date','GlobalID','ADDRESS_ID','SEGMENT_ID','NAME_ID','SIDE','ANOMALY','UNIT_NUM','UNIT_TYPE','NOT MIGRATED']
-    fieldstodrop = ['OBJECTID','srcUnqID','gcLgFlAdr','gcFullAdr','placeType','msagComm','zipCode','esn','srcOfData','taxlotID','srcLastEd','effective','rSrcUnqID','addNumComb','postType','gcFullName','lgcyPreDir','lgcyName','lgcyType','lgcyPstDir','gcLgFlName','building','floor','unitDesc','unitNo','room','seat','location','gcLabel','landmark','zipCode4','country','state','county','incMuni','unincComm','nbrhdComm','postComm','long','lat','milepost','voipEsn','comments','exception','gcCaseNum','gcNotes','gcReview','lastName','firstName','telephone','AT_NAME','SP_NAME','CR_NAME','created_user','created_date','last_edited_user','last_edited_date','GlobalID']
-    df.drop(fieldstodrop, axis=1, inplace=True)
+    APfieldstodrop = ['OBJECTID','srcUnqID','gcLgFlAdr','gcFullAdr','placeType','msagComm','zipCode','esn','srcOfData','taxlotID','srcLastEd','effective','rSrcUnqID','addNumComb','postType','gcFullName','lgcyPreDir','lgcyName','lgcyType','lgcyPstDir','gcLgFlName','building','floor','unitDesc','unitNo','room','seat','location','gcLabel','landmark','zipCode4','country','state','county','incMuni','unincComm','nbrhdComm','postComm','long','lat','milepost','voipEsn','comments','exception','gcCaseNum','gcNotes','gcReview','lastName','firstName','telephone','AT_NAME','SP_NAME','CR_NAME','created_user','created_date','last_edited_user','last_edited_date','GlobalID']
+    df.drop(APfieldstodrop, axis=1, inplace=True)
     writer = pd.ExcelWriter(excel_path)
     df.to_excel(writer, 'Sheet1')
-    arcpy.AddMessage("Saving Excel...")
+    
     writer.save()
 
     #select and export RCLs, if applicable
@@ -49,6 +49,14 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
         arcpy.FeatureClassToFeatureClass_conversion(RCLselection, r'{}\{}'.format(folderToZip, '{}.gdb'.format(name)), 'RCLsToVerify_{}_{}'.format(city, today))
         kmzPath = r'{0}\{1}.kmz'.format(folderToZip, 'RCLsToVerify_{}_{}'.format(city, today))
         arcpy.LayerToKML_conversion(RCLselection, kmzPath)
+        excel_result = arcpy.TableToExcel_conversion(fc, folderToZip + r'\RCLsToVerify_{}_{}.xls'.format(city, today))
+        excel_path = excel_result[0]
+        df = pd.read_excel(excel_path)
+        RCLfieldstodrop = ['OBJECTID', 'srcUnqID', 'gcLgFlName', 'gcFullName', 'rdOwner', 'esnL', 'esnR', 'postCommL', 'postCommR', 'zipCodeL', 'zipCodeR', 'srcOfData', 'srcLastEd', 'effective', 'gcLabel', 'lgcyPreDir', 'lgcyName', 'lgcyType', 'lgcyPstDir', 'parityL', 'parityR', 'speedLimit', 'oneWay', 'roadClass', 'minutes', 'miles', 'fcc', 'fZlevel', 'tZlevel', 'countryL', 'countryR', 'stateL', 'stateR', 'countyL', 'countyR', 'incMuniL', 'incMuniR', 'unincCommL', 'unincCommR', 'nbrhdCommL', 'nbrhdCommR', 'msagCommL', 'msagCommR', 'voipEsnL', 'voipEsnR', 'rdNumber', 'alias', 'exception', 'gcCaseNum', 'gcNotes', 'AT_NAME', 'SP_NAME', 'CR_NAME', 'created_user', 'created_date', 'last_edited_user', 'last_edited_date', 'GlobalID', 'Shape_Length']
+        df.drop(RCLfieldstodrop, axis=1, inplace=True)
+        writer = pd.ExcelWriter(excel_path)
+        df.to_excel(writer, 'Sheet1')
+        writer.save()
 
     #zip folder 
     try:
