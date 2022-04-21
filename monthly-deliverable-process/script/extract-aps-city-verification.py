@@ -29,6 +29,7 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
     #make kmz
     kmzPath = r'{0}\{1}.kmz'.format(folderToZip, 'APsToVerify_{}_{}'.format(city, today))
     arcpy.LayerToKML_conversion(APselection, kmzPath)
+    arcpy.management.SelectLayerByAttribute(APs, 'CLEAR_SELECTION')
     #make excel list
     excel_result = arcpy.TableToExcel_conversion(fc, out_folder + r'\APsToVerify_{}_{}.xls'.format(city, today))
     excel_path = excel_result[0]
