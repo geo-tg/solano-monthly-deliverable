@@ -33,10 +33,7 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
     excel_result = arcpy.TableToExcel_conversion(fc, out_folder + r'\APsToVerify_{}_{}.xls'.format(city, today))
     excel_path = excel_result[0]
     df = pd.read_excel(excel_path)
-    fieldstodrop = ['DiscrpAgID','DateUpdate','Effective','Expire','Country','State','County','AddDataURI','Inc_Muni','Uninc_Comm','Nbrhd_Comm','LSt_PreDir',
-                    'LSt_Name','LSt_Type','LSt_PosDir','ESN','MSAGComm','Post_Comm','Post_Code','Post_Code4','Building','Floor','Room','Seat','Addtl_Loc','LandmkName',
-                    'Mile_Post','Place_Type','Placement','Long','Lat','Elev','GC_Exception','created_user','created_date','last_edited_user','last_edited_date','GlobalID',
-                    'ADDRESS_ID','SEGMENT_ID','NAME_ID','SIDE','ANOMALY','UNIT_NUM','UNIT_TYPE','NOT MIGRATED']
+    fieldstodrop = ['DiscrpAgID','DateUpdate','Effective','Expire','Country','State','County','AddDataURI','Inc_Muni','Uninc_Comm','Nbrhd_Comm','LSt_PreDir','LSt_Name','LSt_Type','LSt_PosDir','ESN','MSAGComm','Post_Comm','Post_Code','Post_Code4','Building','Floor','Room','Seat','Addtl_Loc','LandmkName','Mile_Post','Place_Type','Placement','Long','Lat','Elev','GC_Exception','created_user','created_date','last_edited_user','last_edited_date','GlobalID','ADDRESS_ID','SEGMENT_ID','NAME_ID','SIDE','ANOMALY','UNIT_NUM','UNIT_TYPE','NOT MIGRATED']
     df.drop(fieldstodrop, axis=1, inplace=True)
     writer = pd.ExcelWriter(excel_path)
     df.to_excel(writer, 'Sheet1')
