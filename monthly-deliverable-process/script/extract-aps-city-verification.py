@@ -59,9 +59,9 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
         rclfc =arcpy.FeatureClassToFeatureClass_conversion(RCLselection, r'{}\{}'.format(folderToZip, '{}.gdb'.format(name)), 'RCLsToVerify_{}_{}'.format(city, today))
         kmzPath = r'{0}\{1}.kmz'.format(folderToZip, 'RCLsToVerify_{}_{}'.format(city, today))
         arcpy.LayerToKML_conversion(RCLselection, kmzPath)
-        # excel_result = arcpy.TableToExcel_conversion(rclfc, folderToZip + r'\RCLsToVerify_{}_{}.xls'.format(city, today))
-        # excel_path = excel_result[0]
-        df = pd.read_excel(excel_path)
+        excel_result2 = arcpy.TableToExcel_conversion(rclfc, folderToZip + r'\RCLsToVerify_{}_{}.xls'.format(city, today))
+        excel_path2 = excel_result2[0]
+        df = pd.read_excel(excel_path2)
         #RCLfieldstodrop = ['OBJECTID', 'srcUnqID', 'gcLgFlName', 'gcFullName', 'rdOwner', 'esnL', 'esnR', 'postCommL', 'postCommR', 'zipCodeL', 'zipCodeR', 'srcOfData', 'srcLastEd', 'effective', 'gcLabel', 'lgcyPreDir', 'lgcyName', 'lgcyType', 'lgcyPstDir', 'parityL', 'parityR', 'speedLimit', 'oneWay', 'roadClass', 'minutes', 'miles', 'fcc', 'fZlevel', 'tZlevel', 'countryL', 'countryR', 'stateL', 'stateR', 'countyL', 'countyR', 'incMuniL', 'incMuniR', 'unincCommL', 'unincCommR', 'nbrhdCommL', 'nbrhdCommR', 'msagCommL', 'msagCommR', 'voipEsnL', 'voipEsnR', 'rdNumber', 'alias', 'exception', 'gcCaseNum', 'gcNotes', 'AT_NAME', 'SP_NAME', 'CR_NAME', 'created_user', 'created_date', 'last_edited_user', 'last_edited_date', 'GlobalID', 'Shape_Length']
         #df.drop(RCLfieldstodrop, axis=1, inplace=True)
         # writer = pd.ExcelWriter(excel_path)
