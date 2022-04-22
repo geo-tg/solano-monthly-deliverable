@@ -7,7 +7,7 @@ import arcpy
 from datetime import datetime
 import shutil
 import pandas as pd
-from openpyxl import load_workbook
+import openpyxl
 
 arcpy.env.overwriteOutput = True
 
@@ -50,11 +50,13 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
     #APfieldstodrop = ['OBJECTID','srcUnqID','gcLgFlAdr','gcFullAdr','placeType','msagComm','zipCode','esn','srcOfData','taxlotID','srcLastEd','effective','rSrcUnqID','addNumComb','postType','gcFullName','lgcyPreDir','lgcyName','lgcyType','lgcyPstDir','gcLgFlName','building','floor','unitDesc','unitNo','room','seat','location','gcLabel','landmark','zipCode4','country','state','county','incMuni','unincComm','nbrhdComm','postComm','long','lat','milepost','voipEsn','comments','exception','gcCaseNum','gcNotes','gcReview','lastName','firstName','telephone','AT_NAME','SP_NAME','CR_NAME','created_user','created_date','last_edited_user','last_edited_date','GlobalID']
     df1.drop(APfieldstodrop, axis=1, inplace=True)
 
-    book = load_workbook(excel_path1)
+    book = openpyxl.load_workbook(excel_path1)
     writer = pd.ExcelWriter(excel_path1, engine = 'openpyxl')
     writer.book = book
 
     df1.to_excel(writer, sheet_name = 'APs')
+    sheet1 = book.get_sheet_by_name(r'\NeedsVerification_{}_{}.xlsx'.format(city, today))
+    book.remove_sheet(sheet1)
 
     #select and export RCLs, if applicable
     if RCLs:
