@@ -73,8 +73,6 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
         df2.to_excel(writer, sheet_name = 'RCLs')
         arcpy.management.Delete(excel_result2)
     
-    sheet1 = wb.get_sheet_by_name('Sheet')
-    wb.remove_sheet(sheet1)
     writer.save()
     wb.save(folderToZip + r'\NeedsVerification_{}_{}.xlsx'.format(city, today))
 
