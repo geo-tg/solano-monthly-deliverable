@@ -42,21 +42,19 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
     # df.to_excel(writer, 'Sheet1')
     # writer.save()
 
+    wb = openpyxl.Workbook()
+    path = folderToZip + r'\NeedsVerification_{}_{}.xlsx'.format(city, today)
+    writer = pd.ExcelWriter(path, engine = 'openpyxl')
+    writer.book = wb
 
-    excel_result1 = arcpy.TableToExcel_conversion(apfc, folderToZip + r'\NeedsVerification_{}_{}.xlsx'.format(city, today))
+    excel_result1 = arcpy.TableToExcel_conversion(apfc, folderToZip + r'\APsToVerify_{}_{}.xlsx'.format(city, today))
     excel_path1 = excel_result1[0]
     df1 = pd.read_excel(excel_path1)
     APfieldstodrop = ['DiscrpAgID','DateUpdate','Effective','Expire','Country','State','County','AddDataURI','Inc_Muni','Uninc_Comm','Nbrhd_Comm','LSt_PreDir','LSt_Name','LSt_Type','LSt_PosDir','ESN','MSAGComm','Post_Comm','Post_Code','Post_Code4','Building','Floor','Room','Seat','Addtl_Loc','LandmkName','Mile_Post','Place_Type','Placement','Long','Lat','Elev','GC_Exception','created_user','created_date','last_edited_user','last_edited_date','GlobalID','ADDRESS_ID','SEGMENT_ID','NAME_ID','SIDE','ANOMALY','UNIT_NUM','UNIT_TYPE']
     #APfieldstodrop = ['OBJECTID','srcUnqID','gcLgFlAdr','gcFullAdr','placeType','msagComm','zipCode','esn','srcOfData','taxlotID','srcLastEd','effective','rSrcUnqID','addNumComb','postType','gcFullName','lgcyPreDir','lgcyName','lgcyType','lgcyPstDir','gcLgFlName','building','floor','unitDesc','unitNo','room','seat','location','gcLabel','landmark','zipCode4','country','state','county','incMuni','unincComm','nbrhdComm','postComm','long','lat','milepost','voipEsn','comments','exception','gcCaseNum','gcNotes','gcReview','lastName','firstName','telephone','AT_NAME','SP_NAME','CR_NAME','created_user','created_date','last_edited_user','last_edited_date','GlobalID']
     df1.drop(APfieldstodrop, axis=1, inplace=True)
-
-    book = openpyxl.load_workbook(excel_path1)
-    writer = pd.ExcelWriter(excel_path1, engine = 'openpyxl')
-    writer.book = book
-
     df1.to_excel(writer, sheet_name = 'APs')
-    #sheet1 = book.get_sheet_by_name('NeedsVerification_{}_{}'.format(city, today))
-    book.remove_sheet(book[0])
+    arcpy.management.Delete(excel_result1)
 
     #select and export RCLs, if applicable
     if RCLs:
@@ -76,7 +74,7 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
         arcpy.management.Delete(excel_result2)
     
     writer.save()
-    writer.close()
+    wb.save(folderToZip + r'\NeedsVerification_{}_{}.xlsx'.format(city, today))
 
     #zip folder 
     try:
