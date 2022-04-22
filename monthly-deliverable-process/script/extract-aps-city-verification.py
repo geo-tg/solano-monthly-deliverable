@@ -65,7 +65,7 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
         df2 = pd.read_excel(excel_path2)
         #RCLfieldstodrop = ['OBJECTID', 'srcUnqID', 'gcLgFlName', 'gcFullName', 'rdOwner', 'esnL', 'esnR', 'postCommL', 'postCommR', 'zipCodeL', 'zipCodeR', 'srcOfData', 'srcLastEd', 'effective', 'gcLabel', 'lgcyPreDir', 'lgcyName', 'lgcyType', 'lgcyPstDir', 'parityL', 'parityR', 'speedLimit', 'oneWay', 'roadClass', 'minutes', 'miles', 'fcc', 'fZlevel', 'tZlevel', 'countryL', 'countryR', 'stateL', 'stateR', 'countyL', 'countyR', 'incMuniL', 'incMuniR', 'unincCommL', 'unincCommR', 'nbrhdCommL', 'nbrhdCommR', 'msagCommL', 'msagCommR', 'voipEsnL', 'voipEsnR', 'rdNumber', 'alias', 'exception', 'gcCaseNum', 'gcNotes', 'AT_NAME', 'SP_NAME', 'CR_NAME', 'created_user', 'created_date', 'last_edited_user', 'last_edited_date', 'GlobalID', 'Shape_Length']
         #df.drop(RCLfieldstodrop, axis=1, inplace=True)
-        #writer = pd.ExcelWriter(excel_path)
+        writer = pd.ExcelWriter(excel_path1)
         df2.to_excel(writer, sheet_name = 'RCLs')
         writer.save()
 
