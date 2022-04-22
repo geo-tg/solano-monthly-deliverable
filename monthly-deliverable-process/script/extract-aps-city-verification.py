@@ -49,7 +49,7 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
     #APfieldstodrop = ['OBJECTID','srcUnqID','gcLgFlAdr','gcFullAdr','placeType','msagComm','zipCode','esn','srcOfData','taxlotID','srcLastEd','effective','rSrcUnqID','addNumComb','postType','gcFullName','lgcyPreDir','lgcyName','lgcyType','lgcyPstDir','gcLgFlName','building','floor','unitDesc','unitNo','room','seat','location','gcLabel','landmark','zipCode4','country','state','county','incMuni','unincComm','nbrhdComm','postComm','long','lat','milepost','voipEsn','comments','exception','gcCaseNum','gcNotes','gcReview','lastName','firstName','telephone','AT_NAME','SP_NAME','CR_NAME','created_user','created_date','last_edited_user','last_edited_date','GlobalID']
     df.drop(APfieldstodrop, axis=1, inplace=True)
     writer = pd.ExcelWriter(excel_path)
-    df.to_excel(writer, 'APs')
+    df.to_excel(writer, sheet_name = 'APs')
     writer.save()
 
     #select and export RCLs, if applicable
@@ -64,8 +64,8 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
         df = pd.read_excel(excel_path2)
         #RCLfieldstodrop = ['OBJECTID', 'srcUnqID', 'gcLgFlName', 'gcFullName', 'rdOwner', 'esnL', 'esnR', 'postCommL', 'postCommR', 'zipCodeL', 'zipCodeR', 'srcOfData', 'srcLastEd', 'effective', 'gcLabel', 'lgcyPreDir', 'lgcyName', 'lgcyType', 'lgcyPstDir', 'parityL', 'parityR', 'speedLimit', 'oneWay', 'roadClass', 'minutes', 'miles', 'fcc', 'fZlevel', 'tZlevel', 'countryL', 'countryR', 'stateL', 'stateR', 'countyL', 'countyR', 'incMuniL', 'incMuniR', 'unincCommL', 'unincCommR', 'nbrhdCommL', 'nbrhdCommR', 'msagCommL', 'msagCommR', 'voipEsnL', 'voipEsnR', 'rdNumber', 'alias', 'exception', 'gcCaseNum', 'gcNotes', 'AT_NAME', 'SP_NAME', 'CR_NAME', 'created_user', 'created_date', 'last_edited_user', 'last_edited_date', 'GlobalID', 'Shape_Length']
         #df.drop(RCLfieldstodrop, axis=1, inplace=True)
-        # writer = pd.ExcelWriter(excel_path)
-        df.to_excel(writer, 'RCLs')
+        writer = pd.ExcelWriter(excel_path)
+        df.to_excel(writer, sheet_name = 'RCLs')
         writer.save()
 
 
