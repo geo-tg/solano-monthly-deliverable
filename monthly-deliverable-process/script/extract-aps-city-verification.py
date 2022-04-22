@@ -55,8 +55,8 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
     writer.book = book
 
     df1.to_excel(writer, sheet_name = 'APs')
-    sheet1 = book.get_sheet_by_name('NeedsVerification_{}_{}'.format(city, today))
-    book.remove_sheet(sheet1)
+    #sheet1 = book.get_sheet_by_name('NeedsVerification_{}_{}'.format(city, today))
+    book.remove_sheet(book[0])
 
     #select and export RCLs, if applicable
     if RCLs:
