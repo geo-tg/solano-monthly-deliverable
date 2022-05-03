@@ -61,7 +61,7 @@ def updateTaxMaps(fldr, updated_tm, orig_tm):
     arcpy.AddMessage('Taking backup of TaxMaps...')
     arcpy.Copy_management(orig_tm, fldr + r'\backup_TaxMaps_{}'.format(now))
 
-    arcpy.AddMessage('Deleting trows from tax maps...')
+    arcpy.AddMessage('Deleting rows from tax maps...')
     arcpy.DeleteRows_management(orig_tm)
     arcpy.AddMessage('Appending rows...')
     arcpy.Append_management(updated_tm, orig_tm, 'NO_TEST')
