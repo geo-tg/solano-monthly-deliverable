@@ -28,12 +28,16 @@ def extractFeatures(out_ws, in_fc, in_taxmaps, ap_or_rcl):
     # copy over feature class to feature dataset
     arcpy.AddMessage('Copying dataset...')
     arcpy.AddMessage(datetime.now())
-    out_parcels = arcpy.Copy_management(in_fc, fdataset + f'\{fc_name}')
+    out_fc = arcpy.Copy_management(in_fc, fdataset + f'\{fc_name}')
+
+    arcpy.DisableEditorTracking_management(out_fc)
 
     # copy over taxmaps to feature dataset
     arcpy.AddMessage('Copying taxmaps...')
     arcpy.AddMessage(datetime.now())
-    arcpy.Copy_management(in_taxmaps, fdataset + r'\TaxMap_RCL_AP_review')
+    fc_copy = arcpy.Copy_management(in_taxmaps, fdataset + r'\TaxMap_RCL_AP_review')
+
+    arcpy.DisableEditorTracking_management(fc_copy)
 
     arcpy.AddMessage('Done!')
 
