@@ -192,13 +192,17 @@ def createDeliverables(ap, rcl, parcel, city, zipcode):
             if fulladd_concat_flds[1] != None:
                 fulladd_concat_flds[1] = str(fulladd_concat_flds[1])
             if fulladd_concat_flds[4] not in [None, '']:
-                fulladd_concat_flds[4] = st_dirs[fulladd_concat_flds[4].upper()]
+                if fulladd_concat_flds[4] in st_dirs.keys():
+                    fulladd_concat_flds[4] = st_dirs[fulladd_concat_flds[4].upper()]
             if fulladd_concat_flds[5] not in [None, '']:
-                fulladd_concat_flds[5] = st_types[fulladd_concat_flds[5].upper()]
+                if fulladd_concat_flds[5] in st_types.keys():
+                    fulladd_concat_flds[5] = st_types[fulladd_concat_flds[5].upper()]
             if fulladd_concat_flds[8] not in [None, '']:
-                fulladd_concat_flds[8] = st_types[fulladd_concat_flds[8].upper()]
+                if fulladd_concat_flds[8] in st_types.keys():
+                    fulladd_concat_flds[8] = st_types[fulladd_concat_flds[8].upper()]
             if fulladd_concat_flds[9] not in [None, '']:
-                fulladd_concat_flds[9] = st_dirs[fulladd_concat_flds[9].upper()]
+                if fulladd_concat_flds[9] in st_dirs.keys():
+                    fulladd_concat_flds[9] = st_dirs[fulladd_concat_flds[9].upper()]
 
             fulladd_clean = [f for f in fulladd_concat_flds if f != None and f != '']
             fulladd_str = (' '.join(fulladd_clean)).upper()
@@ -230,13 +234,17 @@ def createDeliverables(ap, rcl, parcel, city, zipcode):
             fulladd_concat_flds = row[3:11]
             bnd_concat_flds = row[11:]
             if fulladd_concat_flds[1] not in [None, '']:
-                fulladd_concat_flds[1] = st_dirs[fulladd_concat_flds[1].upper()]
+                if fulladd_concat_flds[1] in st_dirs.keys():
+                    fulladd_concat_flds[1] = st_dirs[fulladd_concat_flds[1].upper()]
             if fulladd_concat_flds[2] not in [None, '']:
-                fulladd_concat_flds[2] = st_types[fulladd_concat_flds[2].upper()]
+                if fulladd_concat_flds[2] in st_types.keys():
+                    fulladd_concat_flds[2] = st_types[fulladd_concat_flds[2].upper()]
             if fulladd_concat_flds[5] not in [None, '']:
-                fulladd_concat_flds[5] = st_types[fulladd_concat_flds[5].upper()]
+                if fulladd_concat_flds[5] in st_types.keys():
+                    fulladd_concat_flds[5] = st_types[fulladd_concat_flds[5].upper()]
             if fulladd_concat_flds[6] not in [None, '']:
-                fulladd_concat_flds[6] = st_dirs[fulladd_concat_flds[6].upper()]
+                if fulladd_concat_flds[6] in st_dirs.keys():
+                    fulladd_concat_flds[6] = st_dirs[fulladd_concat_flds[6].upper()]
 
             fulladd_clean = [f for f in fulladd_concat_flds if f != None and f != '']
             fulladd_str = (' '.join(fulladd_clean)).upper()
