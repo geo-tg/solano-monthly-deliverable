@@ -176,9 +176,9 @@ def createDeliverables(ap, rcl, parcel, city, zipcode):
         ws = arcpy.da.Describe(desc['path'])['path']
 
     st_dirs_domain = [d for d in arcpy.da.ListDomains(ws) if d.name == 'LegacyStreetNameDirectional'][0]
-    st_dirs = dict((v.upper(), k.upper()) for k,v in st_dirs_domain[0].codedValues.items())
+    st_dirs = dict((v.upper(), k.upper()) for k,v in st_dirs_domain.codedValues.items())
     st_types_domain = [d for d in arcpy.da.ListDomains(ws) if d.name == 'LegacyStreetNameType'][0]
-    st_types = dict((v.upper(), k.upper()) for k,v in st_types_domain[0].codedValues.items())
+    st_types = dict((v.upper(), k.upper()) for k,v in st_types_domain.codedValues.items())
 
     # ap
     arcpy.AddMessage('Address points, again!')
