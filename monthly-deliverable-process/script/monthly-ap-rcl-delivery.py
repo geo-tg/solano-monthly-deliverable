@@ -71,8 +71,8 @@ def createDeliverables(ap, rcl, parcel, city, zipcode):
     arcpy.AddMessage('Roads!')
     # buffer roads by side to get left and right values
     arcpy.AddMessage('Buffering road centerlines on right and left...')
-    l_buff = arcpy.Buffer_analysis(rcl, r'in_memory\rcl_left', '100 FEET', 'LEFT', 'FLAT', 'NONE', 'PLANAR')
-    r_buff = arcpy.Buffer_analysis(rcl, r'in_memory\rcl_right', '100 FEET', 'RIGHT', 'FLAT', 'NONE', 'PLANAR')
+    l_buff = arcpy.Buffer_analysis(rcl, r'in_memory\rcl_left', '100 FEET', 'LEFT', 'FLAT', 'NONE', method='PLANAR')
+    r_buff = arcpy.Buffer_analysis(rcl, r'in_memory\rcl_right', '100 FEET', 'RIGHT', 'FLAT', 'NONE', method='PLANAR')
 
     # tabulate intersections to get proportions
     arcpy.AddMessage('Finding the intersection of the buffers and cities...')
