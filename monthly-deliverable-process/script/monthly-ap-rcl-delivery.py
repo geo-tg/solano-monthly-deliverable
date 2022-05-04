@@ -44,9 +44,10 @@ def createDeliverables(ap, rcl, parcel, city, zipcode):
     with arcpy.da.UpdateCursor(ap, ['OBJECTID', 'APN', 'Inc_Muni', 'Uninc_Comm', 'Post_Comm', 'Post_Code']) as ucur:
         for row in ucur:
             # APN
-            if row[0] in ap_parcel_dict.keys() and row[0] != None:
-                if ap_parcel_dict[row[0]].isdigit():
-                    row[1] = ap_parcel_dict[row[0]]
+            if row[0] in ap_parcel_dict.keys():
+                if ap_parcel_dict[row[0]] != None:
+                    if ap_parcel_dict[row[0]].isdigit():
+                        row[1] = ap_parcel_dict[row[0]]
             
             # Inc_Muni
             if row[0] in ap_city_dict.keys():
