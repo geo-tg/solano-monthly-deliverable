@@ -124,7 +124,7 @@ def createDeliverables(ap, rcl, parcel, city, zipcode):
 
     # populate L&R Inc_Muni, Uninc_Comm, Post_Comm, Post_Code
     arcpy.AddMessage('Updating Left and Right Incorp. Muni., Uninc. Muni., Postal Community Name and Code...')
-    with arcpy.da.UpdateCursor(rcl, ['OBJECTID', 'IncMuni_L', 'IncMuni_R', 'UnincComm_L', 'UnincComm_R', 'PostComm_L', 'PostComm_R', 'PostCode_L', 'PostCode_R']) as ucur:
+    with arcpy.da.UpdateCursor(rcl, ['OBJECTID', 'IncMuni_L', 'IncMuni_R', 'UnincCom_L', 'UnincCom_R', 'PostComm_L', 'PostComm_R', 'PostCode_L', 'PostCode_R']) as ucur:
         for row in ucur:
 
             # Inc_Muni_L
