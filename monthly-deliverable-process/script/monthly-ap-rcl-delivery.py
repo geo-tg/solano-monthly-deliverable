@@ -23,19 +23,19 @@ def createDeliverables(ap, rcl, parcel, city, zipcode):
     arcpy.AddMessage('Address points!')
     # spat join between ap and parcel to grab APN
     arcpy.AddMessage('SJ between AP and Parcels...')
-    ap_parcel_sj = arcpy.SpatialJoin_analysis(ap, parcel, r'in_memory\ap_parcel_sj', 'JOIN_ONE_TO_ONE', 'WITHIN')
+    ap_parcel_sj = arcpy.SpatialJoin_analysis(ap, parcel, r'in_memory\ap_parcel_sj', 'JOIN_ONE_TO_ONE', 'KEEP_ALL', match_option='WITHIN')
     # dict to use in update cursor
     ap_parcel_dict = {row[0]:row[1] for row in arcpy.da.SearchCursor(ap_parcel_sj, ['TARGET_FID', 'PARCELID'])}
 
     # spat join between ap and city to grab inc_muni
     arcpy.AddMessage('SJ between AP and Cities...')
-    ap_city_sj = arcpy.SpatialJoin_analysis(ap, city, r'in_memory\ap_city_sj', 'JOIN_ONE_TO_ONE', 'WITHIN')
+    ap_city_sj = arcpy.SpatialJoin_analysis(ap, city, r'in_memory\ap_city_sj', 'JOIN_ONE_TO_ONE', 'KEEP_ALL', match_option='WITHIN')
     # dict to use in update cur
     ap_city_dict = {row[0]:row[1] for row in arcpy.da.SearchCursor(ap_city_sj, ['TARGET_FID', 'NAME'])}
 
     # spat join between ap and city to grab inc_muni
     arcpy.AddMessage('SJ between AP and Zipcodes...')
-    ap_zip_sj = arcpy.SpatialJoin_analysis(ap, zipcode, r'in_memory\ap_zip_sj', 'JOIN_ONE_TO_ONE', 'WITHIN')
+    ap_zip_sj = arcpy.SpatialJoin_analysis(ap, zipcode, r'in_memory\ap_zip_sj', 'JOIN_ONE_TO_ONE', 'KEEP_ALL', match_option='WITHIN')
     # dict to use in update cur
     ap_zip_dict = {row[0]:[row[1], row[2]] for row in arcpy.da.SearchCursor(ap_zip_sj, ['TARGET_FID', 'zip_code', 'po_name'])}
 
