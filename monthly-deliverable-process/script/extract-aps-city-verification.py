@@ -47,6 +47,8 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
         if apflagcount > 0:
             #make fc
             apfc = arcpy.FeatureClassToFeatureClass_conversion(APselection, r'{}\{}.gdb'.format(folderToZip, name), 'APsToVerify_{}_{}'.format(city, today))
+            arcpy.AddMessage('Calculating XY...')
+            arcpy.CalculateGeometryAttributes_management(apfc, [['Long', 'POINT_X'], ['Lat', 'POINT_Y']], coordinate_format='DD')
             #make kmz
             kmzPath = r'{0}\{1}.kmz'.format(folderToZip, 'APsToVerify_{}_{}'.format(city, today))
             arcpy.LayerToKML_conversion(APselection, kmzPath)
@@ -54,7 +56,7 @@ def exportFlagged(APs, city, domain_num, out_folder, RCLs, query_field):
             excel_result1 = arcpy.TableToExcel_conversion(apfc, folderToZip + r'\APsToVerify_{}_{}.xlsx'.format(city, today), 'NAME', 'DESCRIPTION')
             excel_path1 = excel_result1[0]
             df1 = pd.read_excel(excel_path1)
-            APfieldstodrop = ['OBJECTID', 'DiscrpAgID','DateUpdate','Effective','Expire','Country','State','County','AddDataURI','Inc_Muni','Uninc_Comm','Nbrhd_Comm','LSt_PreDir','LSt_Name','LSt_Type','LSt_PosDir','ESN','MSAGComm','Post_Comm','Post_Code','Post_Code4','Building','Floor','Room','Seat','Addtl_Loc','LandmkName','Mile_Post','Place_Type','Placement','Long','Lat','Elev','GC_Exception','created_user','created_date','last_edited_user','last_edited_date','GlobalID','ADDRESS_ID','SEGMENT_ID','NAME_ID','SIDE','ANOMALY','UNIT_NUM','UNIT_TYPE', 'AddCode']
+            APfieldstodrop = ['OBJECTID', 'DiscrpAgID','DateUpdate','Effective','Expire','Country','State','County','AddDataURI','Inc_Muni','Uninc_Comm','Nbrhd_Comm','LSt_PreDir','LSt_Name','LSt_Type','LSt_PosDir','ESN','MSAGComm','Post_Comm','Post_Code','Post_Code4','Building','Floor','Room','Seat','Addtl_Loc','LandmkName','Mile_Post','Place_Type','Placement','Elev','GC_Exception','created_user','created_date','last_edited_user','last_edited_date','GlobalID','ADDRESS_ID','SEGMENT_ID','NAME_ID','SIDE','ANOMALY','UNIT_NUM','UNIT_TYPE', 'AddCode']
             df1.drop(APfieldstodrop, axis=1, inplace=True)
             df1.to_excel(writer, sheet_name = 'APs')
             arcpy.management.Delete(excel_result1)
