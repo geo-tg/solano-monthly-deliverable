@@ -11,7 +11,7 @@ arcpy.env.overwriteOutput = True
 
 def extractEncroachmentParcels(in_features, out_folder, where_clause):
 
-    print("Running Feature Class to Feature Class...")
+    arcpy.AddMessage("Running Feature Class to Feature Class...")
     tempgdb = arcpy.CreateFileGDB_management(out_folder, 'temporary')
     extracted_EncroachmentParcels = arcpy.FeatureClassToFeatureClass_conversion(in_features, tempgdb, 'encroachments', where_clause)
     
@@ -20,7 +20,7 @@ def extractEncroachmentParcels(in_features, out_folder, where_clause):
     arcpy.AddMessage("Running Table to Excel...")
     excel_result = arcpy.TableToExcel_conversion(extracted_EncroachmentParcels, out_folder + r'\EncroachmentParcels.xls')
     excel_path = excel_result[0]
-    arcpy.management.Delete(tempgdb)
+    arcpy.Delete_management(tempgdb)
 
     arcpy.AddMessage("Formatting Excel file...")
     df = pd.read_excel(excel_path)
