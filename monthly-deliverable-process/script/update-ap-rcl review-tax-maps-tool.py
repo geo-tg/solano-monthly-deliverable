@@ -21,6 +21,8 @@ def updateTaxMaps(fldr, updated_tm, orig_tm):
     aprcl_tm_copy = arcpy.Copy_management(orig_tm, fldr + f'\backup_APRCL_TaxMaps_{now}')
     parcel_tm_copy = arcpy.Copy_management(updated_tm, fldr + f'\backup_parcel_TaxMaps_{now}')
 
+    arcpy.DisableEditorTracking_management(parcel_tm_copy)
+
     orig_flds = ['TaxMapNumber', 'GTGEditor', 'GTGReviewStatus', 'created_user', 'created_date', 'last_edited_user', 'last_edited_date']
     taxmap_dict = dict([(t[0], (t[1], t[2], t[3], t[4], t[5], t[6]))for t in arcpy.da.SearchCursor(aprcl_tm_copy, orig_flds)])
 
