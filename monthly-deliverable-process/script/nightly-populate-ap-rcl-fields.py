@@ -271,7 +271,7 @@ if __name__ == '__main__':
     ## inputs
     workingfolder = r'D:\pro\projects\Solano'
     sde_cxn = r"D:\pro\projects\Solano\graceT@sdeHub.sde"
-    fd = r"D:\pro\projects\Solano\graceT@sdeHub.sde\sdeHub.GRACET.GraceSolanoTest" #must be data owner
+    fd = r"D:\pro\projects\Solano\graceT@sdeHub.sde\sdeHub.GRACET.GraceSolanoTest"
 
     in_ap = r"\sdeHub.GRACET.GraceSolanoTest\sdeHub.GRACET.APs_subset"
     in_rcl = r"\sdeHub.GRACET.GraceSolanoTest\sdeHub.GRACET.RCLs_subset"
