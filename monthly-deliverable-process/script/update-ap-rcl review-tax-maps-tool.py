@@ -18,8 +18,8 @@ def updateTaxMaps(fldr, updated_tm, orig_tm):
     arcpy.DisableEditorTracking_management(orig_tm)
 
     arcpy.AddMessage('Taking backup of TaxMaps...')
-    aprcl_tm_copy = arcpy.CopyFeatures_management(orig_tm, fldr + f'\backup_APRCL_TaxMaps_{now}')
-    parcel_tm_copy = arcpy.CopyFeatures_management(updated_tm, fldr + f'\backup_parcel_TaxMaps_{now}')
+    aprcl_tm_copy = arcpy.CopyFeatures_management(orig_tm, fldr + f'/backup_APRCL_TaxMaps_{now}')
+    parcel_tm_copy = arcpy.CopyFeatures_management(updated_tm, fldr + f'/backup_parcel_TaxMaps_{now}')
 
     arcpy.DisableEditorTracking_management(parcel_tm_copy)
 
