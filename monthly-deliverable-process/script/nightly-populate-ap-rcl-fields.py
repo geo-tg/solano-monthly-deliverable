@@ -12,6 +12,7 @@ populate:
 
 import arcpy
 from datetime import datetime
+import os
 #from monthly-ap-rcl-delivery import createDeliverables
 
 arcpy.env.overwriteOutput = True
@@ -268,31 +269,60 @@ def createDeliverables(ap, rcl, parcel, city, zipcode):
 if __name__ == '__main__':
 
     ## inputs
-    workingfolder = 'D:\pro\projects\Solano'
-    fd = "D:\pro\projects\Solano\SolanoDefault.gdb\TestData"
-    in_ap = "D:\pro\projects\Solano\SolanoDefault.gdb\TestData\APs_subset"
-    in_rcl = "D:\pro\projects\Solano\SolanoDefault.gdb\TestData\RCLs_subset"
-    in_parcels = "D:\pro\projects\Solano\SolanoDefault.gdb\TestData\parcels"
-    in_city = "D:\pro\projects\Solano\SolanoDefault.gdb\TestData\city_bound"
-    in_zipcodes = "D:\pro\projects\Solano\SolanoDefault.gdb\TestData\zipcodes"
+    workingfolder = r'D:\pro\projects\Solano'
+    sde_cxn = r"D:\pro\projects\Solano\graceT@sdeHub.sde"
+    fd = r"D:\pro\projects\Solano\graceT@sdeHub.sde\sdeHub.GRACET.GraceSolanoTest" #must be data owner
+
+    in_ap = r"\sdeHub.GRACET.GraceSolanoTest\sdeHub.GRACET.APs_subset"
+    in_rcl = r"\sdeHub.GRACET.GraceSolanoTest\sdeHub.GRACET.RCLs_subset"
+    in_parcels = r"\sdeHub.GRACET.GraceSolanoTest\sdeHub.GRACET.parcels"
+    in_city = r"\sdeHub.GRACET.GraceSolanoTest\sdeHub.GRACET.city_bound"
+    in_zipcodes = r"\sdeHub.GRACET.GraceSolanoTest\sdeHub.GRACET.zipcodes"
 
     try:
         arcpy.AddMessage(datetime.now().strftime('%m%d%Y %H:%M:%S'))
         arcpy.AddMessage('Beginning process...')
 
+        # Make backup fgdb of APs and RCLs
         arcpy.AddMessage('Creating backup...')
         backupgdb = 'AP_RCL_backup_{}'.format(datetime.now().strftime('%m%d%y'))
         arcpy.management.CreateFileGDB(workingfolder, backupgdb)
-        arcpy.management.CopyFeatures(in_ap, r'{}\{}.gdb\APs'.format(workingfolder, backupgdb))
-        arcpy.management.CopyFeatures(in_rcl, r'{}\{}.gdb\RCLs'.format(workingfolder, backupgdb))
+        arcpy.management.CopyFeatures(sde_cxn + in_ap, r'{}\{}.gdb\APs'.format(workingfolder, backupgdb))
+        arcpy.management.CopyFeatures(sde_cxn+ in_rcl, r'{}\{}.gdb\RCLs'.format(workingfolder, backupgdb))
 
+        # Disable editor tracking
         arcpy.AddMessage('Disabling editor tracking...')
         arcpy.management.DisableEditorTracking(fd)
 
-        arcpy.AddMessage('Making edits...')
-        #arcpy.CalculateField_management(in_rcl, "FullAddress", 'None', "PYTHON3")
-        createDeliverables(in_ap, in_rcl, in_parcels, in_city, in_zipcodes)
+        # Create temporary version
+        # arcpy.AddMessage("Checking if temp version already exists...")
+        # versions = [ver.name for ver in arcpy.da.ListVersions(sde_cxn)]
+        # if 'GRACET.populateFieldsTemp' in versions:
+        #     arcpy.DeleteVersion_management(sde_cxn, 'GRACET.populateFieldsTemp')
+        
+        # arcpy.AddMessage("Creating populateFieldsTemp version...")
+        # arcpy.CreateVersion_management(sde_cxn, 'sde.DEFAULT', 'populateFieldsTemp', 'PRIVATE')
+        # arcpy.AddMessage("Creating connection file w temp version") #NEEDS TO BE UPDATED
+        # arcpy.CreateDatabaseConnection_management(workingfolder, "populateFieldsTemp@sdeHub", "SQL_SERVER", "10.0.0.4", 
+        #             "DATABASE_AUTH","GraceT", "gtgCL0udDb616*", "SAVE_USERNAME", "sdeHub", "", "TRANSACTIONAL", "GRACET.populateFieldsTemp")
+        # temp_sde_cxn = workingfolder + r"\populateFieldsTemp@sdeHub.sde"
 
+        # Execute function
+        arcpy.AddMessage('Exceuting createDeliverables function...')
+        #arcpy.CalculateField_management(in_rcl, "FullAddress", 'None', "PYTHON3")
+        createDeliverables(sde_cxn+in_ap, sde_cxn+in_rcl, sde_cxn+in_parcels, sde_cxn+in_city, sde_cxn+in_zipcodes)
+
+        # Clean up, aisle 5
+        # arcpy.AddMessage("Reconcile and posting edits to sde.DEFAULT")
+        # arcpy.AddMessage("Version populateFieldsTemp will be deleted...") #NEEDS TO BE UPDATED
+        # arcpy.ReconcileVersions_management(temp_sde_cxn, "ALL_VERSIONS", "sde.DEFAULT", "GRACET.populateFieldsTemp", "LOCK_ACQUIRED", "", "", "", 
+        #                                    "POST", "DELETE_VERSION", workingfolder + r"\populateFieldsTempReconcile.txt")
+        
+        # arcpy.AddMessage('Deleting sde connection to deleted version')
+        # if os.path.exists(temp_sde_cxn):
+        #     os.remove(temp_sde_cxn)
+
+        # Re-enable editor tracking
         arcpy.AddMessage('Re-enabling editor tracking...')
         arcpy.management.EnableEditorTracking(fd)
 
@@ -303,3 +333,10 @@ if __name__ == '__main__':
         arcpy.AddMessage(datetime.now().strftime('%m%d%Y %H:%M:%S'))
         arcpy.AddMessage('Problem!')
         arcpy.AddMessage(e)
+
+        # removing version
+        # versions = [ver.name for ver in arcpy.da.ListVersions(sde_cxn)]
+        # if 'GRACET.populateFieldsTemp' in versions:
+        #     arcpy.DeleteVersion_management(sde_cxn, 'GRACET.populateFieldsTemp')
+        # if os.path.exists(temp_sde_cxn):
+        #     os.remove(temp_sde_cxn)
