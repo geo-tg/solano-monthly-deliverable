@@ -5,6 +5,7 @@ populate:
         FullAddress, FullAddr_Label_Abbrv, FullAddr_Label (concat attribution)
         Inc_Muni (overlay with city boundary)
         Uninc_Comm, Post_Comm, Post_Code (overlay with zip code boundary)
+        Unit (concat UNIT_TYPE and UNIT_NUM) [added 6/17/22, Grace T.]
     RCL: FullAddress, FullAddr_Label_Abbrv, FullAddr_Label (concat attribution)
         IncMuni_L, IncMuni_R (overlay with city boundary)
         UnincComm_L, UnincComm_R, PostComm_L, PostComm_R, PostCode_L, PostCode_R (overlay with zip code boundary)
@@ -224,6 +225,16 @@ def createDeliverables(ap, rcl, parcel, city, zipcode):
     
     # FullAddress (E E ST, BENICIA, CA, 94510), FullAddr_Label_Abbrv (E E ST), FullAddr_Label (EAST E STREET)
     
+    arcpy.AddMessage('Updating the unit field...')
+    ap_flds = ['Unit', 'UNIT_TYPE', 'UNIT_NUM']
+    with arcpy.da.UpdateCursor(ap, ap_flds) as ucur:
+        for row in ucur:
+            l = [row[1], row[2]]
+            newl = [x for x in l if x != None and x != '']
+            unit = ' '.join(newl)
+            row[0] = unit
+            ucur.updateRow(row)
+
     # rcl
     arcpy.AddMessage('Roads, again!')
     arcpy.AddMessage('Updating label fields...')

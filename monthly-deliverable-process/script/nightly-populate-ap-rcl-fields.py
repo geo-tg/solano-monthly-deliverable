@@ -226,6 +226,16 @@ def createDeliverables(ap, rcl, parcel, city, zipcode):
     
     # FullAddress (E E ST, BENICIA, CA, 94510), FullAddr_Label_Abbrv (E E ST), FullAddr_Label (EAST E STREET)
     
+    arcpy.AddMessage('Updating the unit field...')
+    ap_flds = ['Unit', 'UNIT_TYPE', 'UNIT_NUM']
+    with arcpy.da.UpdateCursor(ap, ap_flds) as ucur:
+        for row in ucur:
+            l = [row[1], row[2]]
+            newl = [x for x in l if x != None and x != '']
+            unit = ' '.join(newl)
+            row[0] = unit
+            ucur.updateRow(row)
+
     # rcl
     arcpy.AddMessage('Roads, again!')
     arcpy.AddMessage('Updating label fields...')
